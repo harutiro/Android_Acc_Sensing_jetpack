@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "io.github.harutiro.android_acc_sensing_jetpack"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "io.github.harutiro.android_acc_sensing_jetpack"
