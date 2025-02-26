@@ -58,6 +58,8 @@ fun AccSensingScreen(modifier: Modifier = Modifier) {
     val sensorValues by sensorApi.sensorValues.collectAsState()
     var isRecording by remember { mutableStateOf(false) }
     var otherFileStorage by remember { mutableStateOf<OtherFileStorage?>(null) }
+    val fallDetection = remember { FallDetection() }
+    var isShaken by remember { mutableStateOf(false) }
 
     DisposableEffect(Unit) {
         sensorApi.register()
@@ -70,6 +72,12 @@ fun AccSensingScreen(modifier: Modifier = Modifier) {
         if(isRecording){
             otherFileStorage?.doLog("${sensorValues.first},${sensorValues.second},${sensorValues.third}")
         }
+
+        isShaken = fallDetection.addAccelerationData(
+            sensorValues.first.toDouble(),
+            sensorValues.second.toDouble(),
+            sensorValues.third.toDouble()
+        )
     }
 
     Column(
@@ -101,6 +109,10 @@ fun AccSensingScreen(modifier: Modifier = Modifier) {
             }
         )
         Text(if(isRecording) "記録中" else "停止中")
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text("転倒検知: $isShaken")
     }
 }
 
