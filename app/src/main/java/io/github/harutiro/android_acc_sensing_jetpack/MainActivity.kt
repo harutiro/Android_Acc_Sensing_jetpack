@@ -1,5 +1,6 @@
 package io.github.harutiro.android_acc_sensing_jetpack
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -73,11 +74,19 @@ fun AccSensingScreen(modifier: Modifier = Modifier) {
             otherFileStorage?.doLog("${sensorValues.first},${sensorValues.second},${sensorValues.third}")
         }
 
-        isShaken = fallDetection.addAccelerationData(
+        val isNewShaken = fallDetection.addAccelerationData(
             sensorValues.first.toDouble(),
             sensorValues.second.toDouble(),
             sensorValues.third.toDouble()
         )
+
+        if(isShaken != isNewShaken && isNewShaken){
+            MediaPlayer.create(context, R.raw.cutting_the_sword_se).apply {
+                start()
+                setOnCompletionListener { release() }
+            }
+        }
+        isShaken = isNewShaken
     }
 
     Column(
